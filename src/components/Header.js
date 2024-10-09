@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../css/Header.css";
 import displayIcon from "../assets/Display.svg";
 import downIcon from "../assets/down.svg";
 
-const Header = ({ setGrouping, setSorting }) => {
+const Header = ({ setGroupingMethod, setSortingMethod, groupingMethod, sortingMethod }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedGrouping, setSelectedGrouping] = useState("status");
-  const [selectedSorting, setSelectedSorting] = useState("title");
+  const [selectedGrouping, setSelectedGrouping] = useState(groupingMethod);
+  const [selectedSorting, setSelectedSorting] = useState(sortingMethod);
+
+  useEffect(()=>{
+
+  },[])
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -15,14 +19,14 @@ const Header = ({ setGrouping, setSorting }) => {
   const handleGroupingChange = (e) => {
     const value = e.target.value;
     setSelectedGrouping(value);
-    setGrouping(value);
+    setGroupingMethod(value);
     setDropdownOpen(false);
   };
 
   const handleSortingChange = (e) => {
     const value = e.target.value;
     setSelectedSorting(value);
-    setSorting(value);
+    setSortingMethod(value);
     setDropdownOpen(false);
   };
 

@@ -1,52 +1,52 @@
 import { useState, useEffect } from "react";
-import "./quick.css";
+import "./index.css";
 import Header from "./components/Header";
 import Board from "./components/Board";
 
-const API_URL = "https://api.quicksell.co/v1/internal/frontend-assignment";
+const QUICKSELL_API_URL = "https://api.quicksell.co/v1/internal/frontend-assignment";
 
 const App = () => {
-  const [tickets, setTickets] = useState([]);
+  const [cards, setCards] = useState([]);
   const [users, setUsers] = useState([]);
-  const [grouping, setGrouping] = useState(() => {
+  const [groupingMethod, setGroupingMethod] = useState(() => {
     return localStorage.getItem("grouping") || "status";
   });
-  const [sorting, setSorting] = useState(() => {
+  const [sortingMethod, setSortingMethod] = useState(() => {
     return localStorage.getItem("sorting") || "priority";
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchApiData = async () => {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(QUICKSELL_API_URL);
         const data = await response.json();
-        setTickets(data.tickets);
+        setCards(data.tickets);
         setUsers(data.users);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
+    fetchApiData();
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("grouping", grouping);
-    localStorage.setItem("sorting", sorting);
-  }, [grouping, sorting]);
+    localStorage.setItem("grouping", groupingMethod);
+    localStorage.setItem("sorting", sortingMethod);
+  }, [groupingMethod, sortingMethod]);
 
   return (
     <div className="main">
       <Header
-        grouping={grouping}
-        sorting={sorting}
-        setGrouping={setGrouping}
-        setSorting={setSorting}
+        groupingMethod={groupingMethod}
+        sortingMethod={sortingMethod}
+        setGroupingMethod={setGroupingMethod}
+        setSortingMethod={setSortingMethod}
       />
       <Board
-        tickets={tickets}
+        cards={cards}
         users={users}
-        grouping={grouping}
-        sorting={sorting}
+        groupingMethod={groupingMethod}
+        sortingMethod={sortingMethod}
       />
     </div>
   );

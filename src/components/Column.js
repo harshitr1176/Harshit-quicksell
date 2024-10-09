@@ -6,8 +6,8 @@ import sortIcon from "../assets/sort.svg";
 
 const Column = ({
   group,
-  tickets,
-  grouping,
+  cards,
+  groupingMethod,
   priorityIcons,
   statusIcons,
 }) => {
@@ -15,7 +15,7 @@ const Column = ({
     <div className="kanban-column">
       <div className="kanban-column-header">
         <div className="header-left">
-          {grouping === "priority" && (
+          {groupingMethod === "priority" && (
             <img
               src={priorityIcons[group]}
               alt={`${group} Icon`}
@@ -23,11 +23,11 @@ const Column = ({
             />
           )}
 
-          {grouping === "user" && (
+          {groupingMethod === "user" && (
             <img src={userAvatar} alt="User Avatar" className="user-avatar" />
           )}
 
-          {grouping === "status" && (
+          {groupingMethod === "status" && (
             <img
               src={statusIcons[group]}
               alt={`${group} Icon`}
@@ -36,7 +36,7 @@ const Column = ({
           )}
 
           <p className="task-name">{group} </p>
-          <div className="task-total">{tickets.length}</div>
+          <div className="task-total">{cards.length}</div>
         </div>
 
         <div className="header-right">
@@ -44,8 +44,8 @@ const Column = ({
           <img src={sortIcon} alt="Sort Icon" />
         </div>
       </div>
-      {tickets.map((ticket) => (
-        <Card key={ticket.id} ticket={ticket} statusIcons={statusIcons} />
+      {cards.map((cardDetails) => (
+        <Card key={cardDetails.id} cardDetails={cardDetails} statusIcons={statusIcons} groupingMethod={groupingMethod} />
       ))}
     </div>
   );

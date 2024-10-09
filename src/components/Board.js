@@ -13,7 +13,7 @@ import doneIcon from "../assets/Done.svg";
 import backlogIcon from "../assets/Backlog.svg";
 import cancelIcon from "../assets/Cancelled.svg";
 
-const Board = ({ tickets, users, grouping, sorting }) => {
+const Board = ({ cards, users, groupingMethod, sortingMethod }) => {
   const priorityIcons = {
     "No Priority": noPriorityIcon,
     Urgent: urgentIcon,
@@ -31,25 +31,25 @@ const Board = ({ tickets, users, grouping, sorting }) => {
     Cancel: cancelIcon,
   };
 
-  const sortTickets = (tickets) => {
-    return tickets.slice().sort((a, b) => {
-      if (sorting === "title") {
+  const sortTickets = (cards) => {
+    return cards.slice().sort((a, b) => {
+      if (sortingMethod === "title") {
         return a.title.localeCompare(b.title);
-      } else if (sorting === "priority") {
+      } else if (sortingMethod === "priority") {
         return b.priority - a.priority;
       }
       return 0;
     });
   };
 
-  const groupByStatus = (tickets) => {
+  const groupByStatus = (cards) => {
     const statuses = ["Todo", "In progress", "Done", "Backlog", "Cancel"];
     const grouped = statuses.reduce((acc, status) => {
       acc[status] = [];
       return acc;
     }, {});
 
-    tickets.forEach((ticket) => {
+    cards.forEach((ticket) => {
       if (grouped[ticket.status]) {
         grouped[ticket.status].push(ticket);
       }
@@ -58,8 +58,8 @@ const Board = ({ tickets, users, grouping, sorting }) => {
     return grouped;
   };
 
-  const groupByUser = (tickets) => {
-    return tickets.reduce((acc, ticket) => {
+  const groupByUser = (cards) => {
+    return cards.reduce((acc, ticket) => {
       const user = users.find((user) => user.id === ticket.userId);
       const userName = user ? user.name : "Unknown User";
       if (!acc[userName]) acc[userName] = [];
@@ -68,8 +68,8 @@ const Board = ({ tickets, users, grouping, sorting }) => {
     }, {});
   };
 
-  const groupByPriority = (tickets) => {
-    return tickets.reduce((acc, ticket) => {
+  const groupByPriority = (cards) => {
+    return cards.reduce((acc, ticket) => {
       const priorities = ["No Priority", "Low", "Medium", "High", "Urgent"];
       const priorityLabel = priorities[ticket.priority];
       if (!acc[priorityLabel]) acc[priorityLabel] = [];
@@ -78,23 +78,23 @@ const Board = ({ tickets, users, grouping, sorting }) => {
     }, {});
   };
 
-  let groupedTickets = [];
-  if (grouping === "status") groupedTickets = groupByStatus(tickets);
-  else if (grouping === "user") groupedTickets = groupByUser(tickets);
-  else if (grouping === "priority") groupedTickets = groupByPriority(tickets);
+  let groupedCards = [];
+  if (groupingMethod === "status") groupedCards = groupByStatus(cards);
+  else if (groupingMethod === "user") groupedCards = groupByUser(cards);
+  else if (groupingMethod === "priority") groupedCards = groupByPriority(cards);
 
-  for (let group in groupedTickets) {
-    groupedTickets[group] = sortTickets(groupedTickets[group]);
+  for (let group in groupedCards) {
+    groupedCards[group] = sortTickets(groupedCards[group]);
   }
 
   return (
     <div className="kanban-content">
-      {Object.keys(groupedTickets).map((group) => (
+      {Object.keys(groupedCards).map((group) => (
         <Column
           key={group}
           group={group}
-          tickets={groupedTickets[group]}
-          grouping={grouping}
+          cards={groupedCards[group]}
+          groupingMethod={groupingMethod}
           priorityIcons={priorityIcons}
           statusIcons={statusIcons}
         />

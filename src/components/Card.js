@@ -13,31 +13,31 @@ import cancelIcon from "../assets/Cancelled.svg";
 import userAvatar from "../assets/image.jpg";
 
 const priorityIcons = {
-  0: noPriorityIcon,
   4: urgentIcon,
   3: highIcon,
   2: mediumIcon,
   1: lowIcon,
+  0: noPriorityIcon,
 };
 
 const statusIcons = {
-  Todo: todoIcon,
+  "Todo": todoIcon,
   "In progress": inProgressIcon,
 
-  Backlog: backlogIcon,
-  Done: doneIcon,
-  Cancel: cancelIcon,
+  "Backlog": backlogIcon,
+  "Done": doneIcon,
+  "Cancel": cancelIcon,
 };
 
-const Card = ({ ticket }) => {
-  const statusIcon = statusIcons[ticket.status] || null;
-  const priorityIcon = priorityIcons[ticket.priority] || null;
+const Card = ({ cardDetails, groupingMethod }) => {
+  const statusIcon = statusIcons[cardDetails.status] || null;
+  const priorityIcon = priorityIcons[cardDetails.priority] || null;
 
   return (
     <div className="kanban-card">
       <div className="kanban-card-header">
         <div className="idRow">
-          <p className="ticketid">{ticket.id}</p>
+          <p className="ticketid">{cardDetails.id}</p>
           <div className="avatar-container">
             <img className="avatar" src={userAvatar} alt="" />
             <div className="online"></div>
@@ -45,18 +45,20 @@ const Card = ({ ticket }) => {
         </div>
 
         <div className="title-row">
-          {statusIcon && (
+          {statusIcon && !(groupingMethod === 'status') && (
             <div className="status-icon">
-              <img src={statusIcon} alt={ticket.status} />
+              <img src={statusIcon} alt={cardDetails.status} />
             </div>
           )}
-          <div className="title">{ticket.title}</div>
+          <div className="title">{cardDetails.title}</div>
         </div>
       </div>
       <div className="kanban-card-footer">
         <div className="tag-container">
-          <img src={priorityIcon} alt="manual" className="manual-icon" />
-          <p className="tag">{ticket.tag}</p>
+          {
+            !(groupingMethod === 'priority') && <img src={priorityIcon} alt="manual" className="manual-icon" />
+          }
+          <p className="tag">{cardDetails.tag}</p>
         </div>
       </div>
     </div>
